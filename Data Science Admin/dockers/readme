@@ -1,0 +1,45 @@
+Dockers:
+
+https://docs.docker.com/install/linux/docker-ce/ubuntu/
+https://docs.docker.com/install/linux/docker-ce/centos/
+ 
+ 
+#Build Docker Image 
+docker build -t myapp .
+ 
+#Save docker image as file
+docker save -o myapp_image.docker myapp
+ 
+#Copy docker image file to remote host
+scp myapp_image.docker centos@remote_host:
+ 
+#Connect to remote host
+ssh centos@remote_host
+ 
+(Optionally remove the existing image :: docker rmi -f myapp)
+ 
+#Load docker image from file
+docker load -i myapp_image.docker
+ 
+#Run docker image
+docker run myapp
+ 
+........................................
+Sample Dockerfile
+........................................
+#######elasticsearch
+FROM python:3.6
+ 
+MAINTAINER synerzip
+ 
+ADD requirements.txt /app/
+ 
+WORKDIR /app
+ 
+RUN pip3 install -r requirements.txt
+ 
+ADD . /app
+ 
+EXPOSE 5000
+ 
+CMD ["python", "-m", "elasticsearch"]
